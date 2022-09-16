@@ -2,7 +2,10 @@ import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
 
 import style from './Button.module.css'
 
-type DefaultButtonPropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
+type DefaultButtonPropsType = DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>
 
 type PropsType = DefaultButtonPropsType & {
   art?: boolean // add decorations
