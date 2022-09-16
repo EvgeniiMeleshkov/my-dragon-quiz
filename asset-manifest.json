@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/EvgeniiMeleshkov/my-dragon-quiz/static/css/main.431081e7.css",
-    "main.js": "/EvgeniiMeleshkov/my-dragon-quiz/static/js/main.68ba4f37.js",
-    "static/js/787.86a528bf.chunk.js": "/EvgeniiMeleshkov/my-dragon-quiz/static/js/787.86a528bf.chunk.js",
-    "static/media/white-tree.png": "/EvgeniiMeleshkov/my-dragon-quiz/static/media/white-tree.54f8f9515b30b5198c7e.png",
-    "static/media/checked2.svg": "/EvgeniiMeleshkov/my-dragon-quiz/static/media/checked2.b7184d2bb5ede1f01537.svg",
-    "index.html": "/EvgeniiMeleshkov/my-dragon-quiz/index.html",
-    "static/media/star.svg": "/EvgeniiMeleshkov/my-dragon-quiz/static/media/star.8ced2c99262f577fe9b8.svg",
-    "main.431081e7.css.map": "/EvgeniiMeleshkov/my-dragon-quiz/static/css/main.431081e7.css.map",
-    "main.68ba4f37.js.map": "/EvgeniiMeleshkov/my-dragon-quiz/static/js/main.68ba4f37.js.map",
-    "787.86a528bf.chunk.js.map": "/EvgeniiMeleshkov/my-dragon-quiz/static/js/787.86a528bf.chunk.js.map"
+    "main.css": "/my-dragon-quiz/static/css/main.7cbbec3c.css",
+    "main.js": "/my-dragon-quiz/static/js/main.4cbaf850.js",
+    "static/js/787.86a528bf.chunk.js": "/my-dragon-quiz/static/js/787.86a528bf.chunk.js",
+    "static/media/white-tree.png": "/my-dragon-quiz/static/media/white-tree.54f8f9515b30b5198c7e.png",
+    "static/media/checked2.svg": "/my-dragon-quiz/static/media/checked2.b7184d2bb5ede1f01537.svg",
+    "index.html": "/my-dragon-quiz/index.html",
+    "static/media/star.svg": "/my-dragon-quiz/static/media/star.8ced2c99262f577fe9b8.svg",
+    "main.7cbbec3c.css.map": "/my-dragon-quiz/static/css/main.7cbbec3c.css.map",
+    "main.4cbaf850.js.map": "/my-dragon-quiz/static/js/main.4cbaf850.js.map",
+    "787.86a528bf.chunk.js.map": "/my-dragon-quiz/static/js/787.86a528bf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.431081e7.css",
-    "static/js/main.68ba4f37.js"
+    "static/css/main.7cbbec3c.css",
+    "static/js/main.4cbaf850.js"
   ]
 }
