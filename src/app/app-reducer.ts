@@ -1,4 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+import { handleServerNetworkError } from '../common/utilites/handleNetworkError'
+import { authAPI } from '../features/auth/auth-api'
 
 import { AppThunk } from './store'
 
@@ -11,17 +15,34 @@ const initialState: AppStateType = {
 const slice = createSlice({
   name: 'app',
   initialState,
-  reducers: {},
+  reducers: {
+    setInitialized: (state, action: PayloadAction<boolean>) => {
+      state.isInitialized = action.payload
+    },
+    setAppError: (state, action) => {
+      state.error = action.payload
+    },
+    setAppStatus: (state, action: PayloadAction<RequestStatusType>) => {
+      state.status = action.payload
+    },
+  },
 })
 
+export const { setAppError, setAppStatus, setInitialized } = slice.actions
 export const appReducer = slice.reducer
 
 // thunks
 export const initializedAppTC = (): AppThunk => async dispatch => {
   try {
-    //
-  } catch (e) {
-    //
+    const res = await authAPI.me()
+
+    dispatch(setInitialized(true))
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      handleServerNetworkError(error, dispatch)
+    }
+  } finally {
+    dispatch(setInitialized(true))
   }
 }
 

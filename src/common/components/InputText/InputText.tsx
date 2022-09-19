@@ -22,7 +22,6 @@ type PropsType = DefaultInputPropsType & {
 
 export const InputText: React.FC<PropsType> = ({
   label,
-  type,
   onChange,
   onChangeText,
   onKeyDown,

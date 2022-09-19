@@ -1,3 +1,3 @@
-export const SignIn = () => {
-  return <h1>Sign in</h1>
+export const ForgotPassword = () => {
+  return <h1>Forgot Password</h1>
 }
