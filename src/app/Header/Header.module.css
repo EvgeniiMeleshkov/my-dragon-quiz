@@ -1,3 +1,18 @@
+.header {
+  position: relative;
+
+  min-height: 102px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 500px) {
+  .header {
+    min-height: 96px;
+    margin-bottom: 0;
+  }
+}
+
+
 .nav {
   display: flex;
   align-items: center;
@@ -11,4 +26,16 @@
   flex-wrap: wrap;
   gap: 20px;
   justify-content: flex-end;
+}
+
+.logo {
+  flex-shrink: 0;
+
+  width: 200px;
+}
+
+@media (max-width: 500px) {
+  .logo {
+    width: 50px;
+  }
 }

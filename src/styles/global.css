@@ -15,7 +15,7 @@ body {
   margin: 0;
 
   font-family: 'Roboto', sans-serif;
-  font-size: 18px;
+  font-size: var(--basic-fz);
   font-weight: 400;
   line-height: 1.4;
   color: var(--color-white);
@@ -75,4 +75,15 @@ ul {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }

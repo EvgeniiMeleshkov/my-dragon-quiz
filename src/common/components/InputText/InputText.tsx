@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  DetailedHTMLProps,
-  InputHTMLAttributes,
-  KeyboardEvent,
-  useState,
-} from 'react'
+import React, { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent } from 'react'
 
 import style from './InputText.module.css'
 
@@ -14,10 +8,11 @@ type DefaultInputPropsType = DetailedHTMLProps<
 >
 
 type PropsType = DefaultInputPropsType & {
-  label: string
+  label?: string
   onChangeText?: (value: string) => void
   onEnter?: () => void
-  error?: string
+  error?: string | boolean
+  search?: boolean
 }
 
 export const InputText: React.FC<PropsType> = ({
@@ -27,12 +22,13 @@ export const InputText: React.FC<PropsType> = ({
   onKeyDown,
   onEnter,
   error,
+  search,
   ...restProps
 }) => {
-  const [showError, setShowError] = useState<boolean>(!!error)
+  // const [showError, setShowError] = useState<boolean>(!!error)
 
   const onChangeCallback = (e: ChangeEvent<HTMLInputElement>) => {
-    setShowError(false)
+    // setShowError(false)
 
     onChange && // если есть пропс onChange
       onChange(e) // то передать ему е (поскольку onChange не обязателен)
@@ -49,16 +45,17 @@ export const InputText: React.FC<PropsType> = ({
   }
 
   return (
-    <div className={style.box}>
+    <div className={`${style.box} ${search ? style.search : ''}`}>
       <label className={style.label}>{label}</label>
       <input
         type={'text'}
         onChange={onChangeCallback}
         onKeyDown={onKeyDownCallback}
         className={style.input}
+        autoComplete="off"
         {...restProps}
       />
-      {error && showError && <span className={style.error}>{error}</span>}
+      {error && <span className={style.error}>{error}</span>}
     </div>
   )
 }

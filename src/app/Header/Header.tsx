@@ -1,43 +1,61 @@
-import { NavLink } from 'react-router-dom'
+import { LinearProgress } from '@mui/material'
+import { NavLink, useNavigate } from 'react-router-dom'
 
-import whiteTree from '../../assets/images/white-tree.png'
+import logo from '../../assets/images/logo--dark-theme.svg'
+import mobileLogo from '../../assets/images/logo-mobile--dark-theme.svg'
+import { Button } from '../../common/components/Button/Button'
+import { useAppSelector } from '../../common/hooks/useAppSelector'
+import { ProfileLink } from '../../features/profile/ProfileLink/ProfileLink'
 
 import style from './Header.module.css'
 
 export const Header = () => {
-  return (
-    <header>
-      <nav className={style.nav}>
-        <div className="logo">
-          <NavLink to="/">
-            <img width="70" height="70" src={whiteTree} alt="logo" />
-          </NavLink>
-        </div>
+  const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+  const navigate = useNavigate()
+  const status = useAppSelector(state => state.app.status)
 
-        <ul className={style['nav-list']}>
-          <li>
-            <NavLink to="test">Test page</NavLink>
-          </li>
-          <li>
-            <NavLink to="sing-in">Sign in</NavLink>
-          </li>
-          <li>
-            <NavLink to="sign-up">Sign up</NavLink>
-          </li>
-          <li>
-            <NavLink to="forgot-password">Forgot password</NavLink>
-          </li>
-          <li>
-            <NavLink to="new-password">New password</NavLink>
-          </li>
-          <li>
-            <NavLink to="check-email">Check email</NavLink>
-          </li>
-          <li>
-            <NavLink to="profile">Profile</NavLink>
-          </li>
-        </ul>
-      </nav>
+  const navigateToSignIn = () => {
+    navigate('sign-in')
+  }
+
+  return (
+    <header className={style.header}>
+      <div className="container">
+        <nav className={style.nav}>
+          <div className={style.logo}>
+            <NavLink to="/">
+              <picture>
+                <source media="(max-width: 500px)" srcSet={mobileLogo} />
+                <img width="200" src={logo} alt="logo" />
+              </picture>
+            </NavLink>
+          </div>
+
+          <ul className={style['nav-list']}>
+            {isLoggedIn ? (
+              <li>
+                <NavLink to="profile">
+                  <ProfileLink />
+                </NavLink>
+              </li>
+            ) : (
+              <Button onClick={navigateToSignIn} art>
+                Sign in
+              </Button>
+            )}
+          </ul>
+        </nav>
+      </div>
+      {status === 'loading' && (
+        <LinearProgress
+          sx={{
+            position: 'absolute',
+            width: '100%',
+            top: 0,
+          }}
+          color={'warning'}
+        />
+      )}
     </header>
   )
 }

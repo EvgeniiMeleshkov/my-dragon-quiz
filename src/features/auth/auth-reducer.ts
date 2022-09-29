@@ -1,28 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios from 'axios'
 
+import { setAppStatus } from '../../app/app-reducer'
 import { AppThunk } from '../../app/store'
-import { handleServerNetworkError } from '../../common/utilites/handleNetworkError'
+import { handleServerNetworkError } from '../../common/utils/handleNetworkError'
 
 import { authAPI, ProfileType, signUpType, UpdateProfileModelType } from './auth-api'
 import { LoginFormDataType } from './sign-in/SignIn'
 
 const initialState = {
   isLoggedIn: false,
-  profile: {} as ProfileType, // исправить на null || ProfileType
-  isRegister: false,
+  profile: null as ProfileType | null,
 }
 
 export const slice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<ProfileType>) => {
-      state.profile = action.payload
+    login: (state, action: PayloadAction<{ profile: ProfileType }>) => {
+      state.profile = action.payload.profile
       state.isLoggedIn = true
     },
-    setRegisteredIn(state, action: PayloadAction<{ isRegister: boolean }>) {
-      state.isRegister = action.payload.isRegister
+    logout(state) {
+      state.isLoggedIn = false
+      state.profile = null
     },
     updateProfile(state, action: PayloadAction<{ profile: ProfileType }>) {
       state.profile = action.payload.profile
@@ -30,50 +30,92 @@ export const slice = createSlice({
   },
 })
 
-export const { login, setRegisteredIn, updateProfile } = slice.actions
+export const { login, logout, updateProfile } = slice.actions
 export const authReducer = slice.reducer
 
 // thunks
+export const forgotPasswordTC =
+  (email: string, navigate: () => void): AppThunk =>
+  async dispatch => {
+    dispatch(setAppStatus({ status: 'loading' }))
+
+    try {
+      await authAPI.forgotPassword(email)
+      navigate()
+      dispatch(setAppStatus({ status: 'succeeded' }))
+    } catch (e) {
+      handleServerNetworkError(e, dispatch)
+    }
+  }
+
+export const setNewPasswordTC =
+  (password: string, token: string, navigateInSuccess: () => void): AppThunk =>
+  async dispatch => {
+    dispatch(setAppStatus({ status: 'loading' }))
+
+    try {
+      await authAPI.setNewPassword(password, token)
+      navigateInSuccess()
+      dispatch(setAppStatus({ status: 'succeeded' }))
+    } catch (e) {
+      handleServerNetworkError(e, dispatch)
+    }
+  }
+
 export const updateProfileTC =
   (model: UpdateProfileModelType): AppThunk =>
   async dispatch => {
+    dispatch(setAppStatus({ status: 'loading' }))
+
     try {
       const response = await authAPI.updateProfile(model)
 
       dispatch(updateProfile({ profile: response.data.updatedUser }))
+      dispatch(setAppStatus({ status: 'succeeded' }))
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        handleServerNetworkError(e, dispatch)
-      }
+      handleServerNetworkError(e, dispatch)
     }
   }
 
 export const loginTC =
   (loginFormData: LoginFormDataType): AppThunk =>
   async dispatch => {
+    dispatch(setAppStatus({ status: 'loading' }))
     try {
       const res = await authAPI.login(loginFormData)
 
-      dispatch(login(res.data))
+      dispatch(login({ profile: res.data }))
+      dispatch(setAppStatus({ status: 'succeeded' }))
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        handleServerNetworkError(e, dispatch)
-      }
+      handleServerNetworkError(e, dispatch)
     }
   }
 
+export const logoutTC = (): AppThunk => async dispatch => {
+  dispatch(setAppStatus({ status: 'loading' }))
+  try {
+    await authAPI.logout()
+    dispatch(logout())
+    dispatch(setAppStatus({ status: 'succeeded' }))
+  } catch (e) {
+    handleServerNetworkError(e, dispatch)
+  }
+}
+
 export const setRegisteredInTC =
-  (data: signUpType): AppThunk =>
+  (data: signUpType, navigate: () => void): AppThunk =>
   async dispatch => {
+    dispatch(setAppStatus({ status: 'loading' }))
+
     try {
       const res = await authAPI.signUp(data)
 
-      dispatch(setRegisteredIn({ isRegister: true }))
+      navigate()
+      dispatch(setAppStatus({ status: 'succeeded' }))
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        handleServerNetworkError(e, dispatch)
-      }
+      handleServerNetworkError(e, dispatch)
     }
   }
 
 // types
+export type AuthReducerStateType = typeof initialState

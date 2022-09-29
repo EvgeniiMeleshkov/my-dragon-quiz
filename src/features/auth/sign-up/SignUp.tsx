@@ -1,16 +1,19 @@
 import React from 'react'
 
 import { useFormik } from 'formik'
-import { Navigate, NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../../../app/store'
 import eyeImg from '../../../assets/icons/eye.webp'
 import { Button } from '../../../common/components/Button/Button'
 import { showPassword } from '../../../common/components/customShowPassword/showPassword'
 import { InputText } from '../../../common/components/InputText/InputText'
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch'
+import { Paths } from '../../../common/routes'
 import { setRegisteredInTC } from '../auth-reducer'
+import authStyle from '../auth.module.css'
 
 import { validateSignUp } from './validateSignUp'
+
 export type SignUpFormType = {
   email?: string
   password?: string
@@ -19,8 +22,8 @@ export type SignUpFormType = {
 
 export const SignUp = () => {
   const { show, setShowPassword, showConfirm, setShowConfirmPassword } = showPassword()
+  const navigateSignUp = useNavigate()
   const dispatch = useAppDispatch()
-  const isRegister = useAppSelector(state => state.auth.isRegister)
 
   const formik = useFormik({
     initialValues: {
@@ -30,62 +33,70 @@ export const SignUp = () => {
     },
     validate: values => validateSignUp(values),
     onSubmit: values => {
-      dispatch(setRegisteredInTC(values))
+      dispatch(setRegisteredInTC(values, navigateInSuccess))
     },
   })
 
-  if (isRegister) {
-    return <Navigate to={'/sing-in'} />
+  const navigateInSuccess = () => {
+    navigateSignUp(Paths.SingIn)
   }
 
   return (
-    <div>
-      <div>
-        <form onSubmit={formik.handleSubmit}>
-          <h2>Sign Up</h2>
-          <InputText label={'Email'} id={'email'} {...formik.getFieldProps('email')} />
-          {formik.touched.email && formik.errors.email && (
-            <div style={{ color: 'red' }}>{formik.errors.email}</div>
-          )}
+    <div className={authStyle.container}>
+      <form onSubmit={formik.handleSubmit}>
+        <h2 className="section-title">Sign Up</h2>
+
+        <div className={authStyle['input-box']}>
+          <InputText
+            label={'Email'}
+            id={'email'}
+            {...formik.getFieldProps('email')}
+            error={formik.touched.email && formik.errors.email}
+          />
 
           <div>
-            <div style={{ display: 'flex' }}>
+            <div className={authStyle['password-box']}>
               <InputText
                 label={'Password'}
                 type={show ? 'password' : 'text'}
                 {...formik.getFieldProps('password')}
+                error={formik.touched.password && formik.errors.password}
               />
-              <div onClick={setShowPassword}>
-                <img src={eyeImg} alt="eye" style={{ width: '30px' }} />
+              <div
+                onClick={setShowPassword}
+                className={`${authStyle.eye} ${show ? '' : authStyle.cross}`}
+              >
+                <img src={eyeImg} alt="eye" width="30px" />
               </div>
             </div>
-
-            {formik.touched.password && formik.errors.password && (
-              <div style={{ color: 'red' }}>{formik.errors.password}</div>
-            )}
           </div>
+
           <div>
-            <div style={{ display: 'flex' }}>
+            <div className={authStyle['password-box']}>
               <InputText
                 label={'Confirm password'}
                 type={showConfirm ? 'password' : 'text'}
                 {...formik.getFieldProps('confirmPassword')}
+                error={formik.touched.confirmPassword && formik.errors.confirmPassword}
               />
-              <div onClick={setShowConfirmPassword}>
-                <img src={eyeImg} alt="eye" style={{ width: '30px' }} />
+              <div
+                onClick={setShowConfirmPassword}
+                className={`${authStyle.eye} ${showConfirm ? '' : authStyle.cross}`}
+              >
+                <img src={eyeImg} alt="eye" width="30px" />
               </div>
             </div>
-
-            {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-              <div style={{ color: 'red' }}>{formik.errors.confirmPassword}</div>
-            )}
           </div>
+        </div>
 
+        <div className={authStyle['button-box']}>
           <Button type={'submit'}>Sign Up</Button>
-          <p>Already have an account?</p>
-          <NavLink to={''}>Sign In</NavLink>
-        </form>
-      </div>
+          <p className={authStyle.text}>Already have an account?</p>
+          <NavLink className="link" to={'/sign-in'}>
+            Sign In
+          </NavLink>
+        </div>
+      </form>
     </div>
   )
 }

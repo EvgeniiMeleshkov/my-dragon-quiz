@@ -3,8 +3,9 @@ import { ChangeEvent, KeyboardEvent, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import { IconButton } from '@mui/material'
 
-import { Button } from '../Button/Button'
 import { InputText } from '../InputText/InputText'
+
+import style from './EditableSpan.module.css'
 
 type PropsType = {
   text: string
@@ -20,6 +21,11 @@ export const EditableSpan = (props: PropsType) => {
   }
 
   const turnOffEditMode = () => {
+    setEditMode(false)
+    setInputText(props.text)
+  }
+
+  const changeText = () => {
     if (inputText.trim() && inputText !== props.text) {
       props.changeText(inputText)
     }
@@ -32,25 +38,28 @@ export const EditableSpan = (props: PropsType) => {
 
   const inputKeyDownHandler = (evt: KeyboardEvent<HTMLInputElement>) => {
     if (evt.key === 'Enter') {
+      changeText()
+    }
+
+    if (evt.key === 'Escape') {
       turnOffEditMode()
     }
   }
 
   return editMode ? (
-    <div className="box">
+    <div className={style.box}>
       <InputText
-        label="Nickname"
         value={inputText}
         onChange={inputChangeHandler}
         onKeyDown={inputKeyDownHandler}
+        onBlur={changeText}
         autoFocus
       />
-      <Button onClick={turnOffEditMode}>Save</Button>
     </div>
   ) : (
-    <div className="box">
-      <b>{props.text}</b>
-      <IconButton onClick={turnOnEditMode}>
+    <div className={style.box}>
+      <span>{props.text}</span>
+      <IconButton className={style['icon-button']} onClick={turnOnEditMode}>
         <EditIcon />
       </IconButton>
     </div>
